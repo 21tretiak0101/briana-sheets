@@ -22,7 +22,6 @@ const jsLoaders = () => {
   if (isDev) {
     loaders.push('eslint-loader');
   }
-
   return loaders;
 };
 
@@ -44,7 +43,7 @@ module.exports = {
   devtool: isDev ? 'source-map' : false,
   devServer: {
     port: 3000,
-    hot: isDev
+    hot: isDev,
   },
   plugins: [
     new CleanWebpackPlugin(),
