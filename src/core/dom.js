@@ -26,6 +26,22 @@ class Dom {
     return this;
   }
 
+  get data() {
+    return this.$element.dataset;
+  }
+
+  findAll(selector) {
+    return this.$element.querySelectorAll(selector);
+  }
+
+  find(selector) {
+    return $(this.$element.querySelector(selector));
+  }
+
+  get text() {
+    return this.$element.textContent.trim();
+  }
+
   append(node) {
     if (node instanceof Dom) {
       node = node.$element;
@@ -36,6 +52,20 @@ class Dom {
       this.$element.appendChild(node);
     }
     return this;
+  }
+
+  css(styles = {}) {
+    Object
+        .keys(styles)
+        .forEach(key => this.$element.style[key] = styles[key]);
+  }
+
+  closest(selector) {
+    return $(this.$element.closest(selector));
+  }
+
+  getCoordinates() {
+    return this.$element.getBoundingClientRect();
   }
 }
 
