@@ -3,13 +3,17 @@ const CODES = {
   Z: 90
 };
 
-function toCell(_, column) {
-  const columnChar = toChar(_, column);
-  return `
-    <div class="cell" contenteditable="true" 
-        data-column="${columnChar}">
-    </div>  
+function toCell(row) {
+  return function(_, column) {
+    const columnChar = toChar(_, column);
+    return `
+    <div class="cell" 
+        contenteditable="true" 
+        data-column="${columnChar}"
+        data-id="${columnChar}:${row}"
+        ></div>  
   `;
+  };
 }
 
 function toColumn(column) {
@@ -46,10 +50,10 @@ function createColumns(count) {
       .join('');
 }
 
-function createCells(count) {
+function createCells(count, row) {
   return new Array(count)
       .fill('')
-      .map(toCell)
+      .map(toCell(row))
       .join('');
 }
 
@@ -60,7 +64,7 @@ export function createTable(rowsCount = 30) {
   rows.push(createRow(columns));
 
   for (let i = 0; i < rowsCount; i++) {
-    const cells = createCells(columnsCount);
+    const cells = createCells(columnsCount, i + 1);
     rows.push(createRow(cells, i + 1));
   }
 
