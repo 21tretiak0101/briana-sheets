@@ -13,6 +13,17 @@ class Dom {
     return this.$element.outerHTML.trim();
   }
 
+  text(text) {
+    if (typeof text === 'string') {
+      this.$element.textContent = text;
+      return this;
+    }
+    if (this.$element.tagName.toLowerCase() === 'input') {
+      return this.$element.value.trim();
+    }
+    return this.$element.textContent.trim();
+  }
+
   on(eventType, callback) {
     this.$element.addEventListener(eventType, callback);
   }
@@ -38,8 +49,24 @@ class Dom {
     return $(this.$element.querySelector(selector));
   }
 
-  get text() {
-    return this.$element.textContent.trim();
+  get id() {
+    const id = this.data.id.split(':');
+    return {col: id[0], row: +id[1]};
+  }
+
+  focus() {
+    this.$element.focus();
+    return this;
+  }
+
+  addClass(className) {
+    this.$element.classList.add(className);
+    return this;
+  }
+
+  removeClass(className) {
+    this.$element.classList.remove(className);
+    return this;
   }
 
   append(node) {
