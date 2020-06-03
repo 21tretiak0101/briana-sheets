@@ -1,11 +1,19 @@
 import {ExcelComponent} from '@core/ExcelComponent';
 import {createTable} from '@/components/table/table.template';
-import {resizeTable} from '@/components/table/table.resize';
-import {getGroupIds, isResizable} from '@/components/table/table.utils';
-import {nextSelector} from '@/components/table/table.utils';
-import {isSelectable, shiftPressed} from '@/components/table/table.utils';
+import {resizeHandler} from '@/components/table/table.resize';
 import {TableSelection} from '@/components/table/TableSelection';
 import {$} from '@core/dom';
+import {parse} from '@core/parse';
+import * as actions from '@/store/actions';
+import {
+  getGroupIds,
+  isResizable,
+  nextSelector,
+  shiftPressed,
+  isSelectable
+} from '@/components/table/table.utils';
+import {changeText} from '@/store/actions';
+import {DEFAULT_STYLES} from '@/enviroments';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table';
@@ -27,10 +35,20 @@ export class Table extends ExcelComponent {
   init() {
     super.init();
     this.selectCell(this.$root.find('[data-id="A:1"]'));
-    this.$on('formula:input', text => {
-      this.selection.$current.text(text);
+    this.$on('formula:input', value => {
+      const $current = this.selection.$current;
+      $current
+          .attr('data-value', value)
+          .text(parse(value));
+      this.updateStore($current.data.id, value);
     });
     this.$on('formula:done', () => this.selection.$current.focus());
+    this.$on('toolbar:applyStyle', style => {
+      this.selection.applyStyles(style);
+      this.$dispatch(actions.changeStyles(
+          {ids: this.selection.selectedIds, style}));
+      this.$dispatch(actions.applyStyle(style));
+    });
   }
 
   prepare() {
@@ -38,18 +56,28 @@ export class Table extends ExcelComponent {
   }
 
   toHTML() {
-    return createTable();
+    return createTable(40, this.store.getState());
   }
 
   selectCell($cell) {
     this.selection.select($cell);
     this.$emit('table:select', $cell);
+    const style = $cell.getStyles(Object.keys(DEFAULT_STYLES));
+    this.$dispatch(actions.applyStyle(style));
   }
 
+  async resizeTable(event) {
+    try {
+      const data = await resizeHandler(event, this.$root);
+      this.$dispatch(actions.tableResize(data));
+    } catch (e) {
+      console.warn('Resize error: ', e.message);
+    }
+  }
 
   onMouseDown(event) {
     if (isResizable(event)) {
-      resizeTable(this.$root, event);
+      this.resizeTable(event);
     }
   }
 
@@ -73,7 +101,14 @@ export class Table extends ExcelComponent {
     }
   }
 
+  updateStore(id, text) {
+    this.$dispatch(changeText({id, text}));
+  }
+
   onInput(event) {
-    this.$emit('table:input', $(event.target).text());
+    const text = $(event.target).text();
+    this.selection.$current.attr('data-value', text);
+    this.$emit('table:input', text);
+    this.updateStore($(event.target).data.id, text);
   }
 }

@@ -1,21 +1,21 @@
 export class Emitter {
   constructor() {
-    this.listeners = {};
+    this.subscribers = {};
   }
 
   emit(event, ...args) {
-    if (Array.isArray(this.listeners[event])) {
-      this.listeners[event].forEach(listener => {
+    if (Array.isArray(this.subscribers[event])) {
+      this.subscribers[event].forEach(listener => {
         listener(...args);
       });
     }
   }
 
   subscribe(event, callback) {
-    this.listeners[event] = this.listeners[event] || [];
-    this.listeners[event].push(callback);
+    this.subscribers[event] = this.subscribers[event] || [];
+    this.subscribers[event].push(callback);
     return () => {
-      this.listeners[event] = this.listeners[event]
+      this.subscribers[event] = this.subscribers[event]
           .filter(listener => listener !== callback);
     };
   }

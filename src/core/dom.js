@@ -14,7 +14,7 @@ class Dom {
   }
 
   text(text) {
-    if (typeof text === 'string') {
+    if (typeof text !== 'undefined') {
       this.$element.textContent = text;
       return this;
     }
@@ -93,6 +93,18 @@ class Dom {
 
   getCoordinates() {
     return this.$element.getBoundingClientRect();
+  }
+
+  attr(name, value) {
+    this.$element.setAttribute(name, value);
+    return this;
+  }
+
+  getStyles(styles = []) {
+    return styles.reduce((prev, key) => {
+      prev = {...prev, [key]: this.$element.style[key]};
+      return prev;
+    }, {});
   }
 }
 
