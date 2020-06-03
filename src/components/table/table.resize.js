@@ -1,69 +1,52 @@
 import {$} from '@core/dom';
 
-export function resizeTable($root, event) {
-  const $resizer = $(event.target);
-  const resizeType = $resizer.data.resize;
-  setMovableResizer($resizer, resizeType);
-  const $parent = $resizer.closest('[data-type="resizable"]');
-  const coordinates = $parent.getCoordinates();
-  let value;
+export function resizeHandler(event, $root) {
+  return new Promise(resolve => {
+    const $resizer = $(event.target);
+    const resizeType = $resizer.data.resize;
+    const side = resizeType === 'col' ? 'bottom' : 'right';
+    $resizer.css({
+      opacity: 1,
+      [side]: '-5000px'
+    });
+    const $parent = $resizer.closest('[data-type="resizable"]');
+    const coordinates = $parent.getCoordinates();
+    let value = resizeType === 'col'
+        ? $parent.$element.style.width
+        : $parent.$element.style.height;
+    document.onmousemove = (ev) => {
+      if (resizeType === 'col') {
+        const deltaX = ev.clientX - coordinates.right;
+        $resizer.css({right: -deltaX + 'px'});
+        value = (coordinates.width + deltaX) + 'px';
+      } else {
+        const deltaY = ev.clientY - coordinates.bottom;
+        $resizer.css({bottom: -deltaY + 'px'});
+        value = (coordinates.height + deltaY) + 'px';
+      }
+    };
+    document.onmouseup = () => {
+      document.onmousemove = null;
+      document.onmouseup = null;
 
-  document.onmousemove = ev => {
-    value = moveResizer(ev, $resizer, resizeType, coordinates);
-  };
+      if (resizeType === 'col') {
+        $parent.css({width: value});
+        $root.findAll(`[data-column="${$parent.text()}"]`)
+            .forEach(cell => $(cell).css({width: value}));
+      } else {
+        $parent.css({height: value});
+      }
 
-  document.onmouseup = () => {
-    document.onmousemove = null;
-    document.onmouseup = null;
+      resolve({
+        value,
+        id: resizeType === 'col' ? $parent.data.column: $parent.data.row
+      });
 
-    if (resizeType === 'col') {
-      resizeColumn($root, $parent, value);
-    } else {
-      resizeRow($root, $parent, value);
-    }
-    setDefaultResizer($resizer);
-  };
-}
-
-function resizeColumn($root, $parent, value) {
-  $parent.css({width: value});
-  $root
-      .findAll(`[data-column="${$parent.text}"]`)
-      .forEach(cell => $(cell).css({width: value}));
-}
-
-function resizeRow($root, $parent, value) {
-  $root
-      .find(`[data-row="${$parent.text}"]`)
-      .css({height: value});
-}
-
-function setDefaultResizer($resizer) {
-  $resizer.css({
-    opacity: 0,
-    bottom: 0,
-    right: 0
-  });
-}
-
-function moveResizer(event, $resizer, resizerType, coordinates) {
-  let value;
-  if (resizerType === 'col') {
-    const deltaX = event.clientX - coordinates.right;
-    $resizer.css({right: -deltaX + 'px'});
-    value = (coordinates.width + deltaX) + 'px';
-  } else {
-    const deltaY = event.clientY - coordinates.bottom;
-    $resizer.css({bottom: -deltaY + 'px'});
-    value = (coordinates.height + deltaY) + 'px';
-  }
-  return value;
-}
-
-function setMovableResizer($resizer, resizeType) {
-  const side = resizeType === 'col' ? 'bottom' : 'right';
-  $resizer.css({
-    opacity: 1,
-    [side]: '-5000px'
+      $resizer.css({
+        opacity: 0,
+        bottom: 0,
+        right: 0
+      });
+    };
   });
 }

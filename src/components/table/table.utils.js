@@ -74,3 +74,30 @@ export function nextSelector(event) {
   }
   return `[data-id="${col}:${row}"]`;
 }
+
+export function isEqual(a, b) {
+  if (typeof a === 'object' && typeof b === 'object') {
+    return JSON.stringify(a) === JSON.stringify(b);
+  }
+  return a === b;
+}
+
+export function camelToDashCase(str) {
+  return str.split(/(?=[A-Z])/).join('-').toLowerCase();
+}
+
+export function getStyles(keys) {
+  return Object
+      .keys(keys)
+      .map(key => `${camelToDashCase(key)}: ${keys[key]}; `)
+      .join('');
+}
+
+export const CODES = {
+  A: 65,
+  Z: 90
+};
+
+export const DEFAULT_ROW_HEIGHT = 24;
+
+export const DEFAULT_COLUMN_WIDTH = 120;

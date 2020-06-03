@@ -11,6 +11,7 @@ export class Formula extends ExcelComponent {
         {eventType: 'input', method: 'onInput'},
         {eventType: 'keydown', method: 'onKeyDown'}
       ],
+      subscribe: ['dataState'],
       ...options
     });
   }
@@ -20,7 +21,9 @@ export class Formula extends ExcelComponent {
     this.$formula = this.$root.find('[data-type="formula"]');
     this.$on('table:input',
         text => this.$formula.text(text));
-    this.$on('table:select', $cell => this.$formula.text($cell.text()));
+    this.$on('table:select', $cell => {
+      this.$formula.text($cell.data.value);
+    });
   }
 
   toHTML() {
@@ -33,8 +36,12 @@ export class Formula extends ExcelComponent {
     ></div>`;
   }
 
+  storeChanged(state) { }
+
   onInput(event) {
-    this.$emit('formula:input', $(event.target).text());
+    const text = $(event.target).text();
+    console.log(text);
+    this.$emit('formula:input', text);
   }
 
   onKeyDown(event) {
