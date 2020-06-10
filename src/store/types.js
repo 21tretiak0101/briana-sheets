@@ -7,3 +7,5 @@ export const APPLY_STYLE = 'APPLY_STYLE';
 export const CHANGE_STYLES = 'CURRENT_STYLES';
 
 export const CHANGE_TITLE = 'CHANGE_TITLE';
+
+export const UPDATE_DATE = 'CHANGE_DATE';
