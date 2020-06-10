@@ -1,13 +1,12 @@
-import {storage} from '@core/storage';
-import {DEFAULT_STYLES} from '@/enviroments';
-import {CHANGE_TITLE} from '@/store/types';
+import {DEFAULT_STYLES, DEFAULT_TITLE} from '@/enviroments';
 
 const defaultState = {
-  tableTitle: CHANGE_TITLE,
+  tableTitle: DEFAULT_TITLE,
   sizeState: {},
   dataState: {},
   stylesState: {},
-  currentStyles: DEFAULT_STYLES
+  currentStyles: DEFAULT_STYLES,
+  lastOpened: ''
 };
 
 const normalize = (state) => ({
@@ -15,6 +14,6 @@ const normalize = (state) => ({
   currentStyles: DEFAULT_STYLES
 });
 
-export const initialState = storage('state')
-    ? normalize(storage('state'))
-    : defaultState;
+export function normalizeInitial(state) {
+  return state ? normalize(state) : defaultState;
+}

@@ -2,7 +2,7 @@ import {
   CHANGE_TEXT,
   CHANGE_STYLES,
   TABLE_RESIZE,
-  APPLY_STYLE, CHANGE_TITLE,
+  APPLY_STYLE, CHANGE_TITLE, UPDATE_DATE,
 } from '@/store/types';
 
 export function rootReducer(state, action) {
@@ -38,6 +38,11 @@ export function rootReducer(state, action) {
       return {
         ...state,
         tableTitle: action.data
+      };
+    case UPDATE_DATE:
+      return {
+        ...state,
+        lastOpened: action.data
       };
     default: return state;
   }
