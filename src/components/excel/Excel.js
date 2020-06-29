@@ -1,7 +1,7 @@
 import {$} from '@core/dom';
 import {Emitter} from '@core/Emitter';
-import {StoreSubscriber} from '@/store/StoreSubscriber';
-import {changeDate} from '@/store/actions';
+import {StoreSubscriber} from '@store/StoreSubscriber';
+import {changeDate} from '@store/actions';
 
 export class Excel {
   constructor(options) {

@@ -1,9 +1,9 @@
 import {ExcelComponent} from '@core/ExcelComponent';
-import {changeTitle} from '@/store/actions';
+import {changeTitle} from '@store/actions';
 import {$} from '@core/dom';
 import {ActiveRoute} from '@core/routes/ActiveRoute';
-import {removeFromStorage} from '@/store/storage';
-import {tableID} from '@/components/table/table.utils';
+import {removeFromStorage} from '@store/storage';
+import {tableID} from '@components/table/table.utils';
 
 export class Header extends ExcelComponent {
   static className = 'excel__header';

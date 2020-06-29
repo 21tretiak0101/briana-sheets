@@ -2,8 +2,8 @@ import {
   CODES,
   DEFAULT_COLUMN_WIDTH,
   DEFAULT_ROW_HEIGHT, getStyles,
-} from '@/components/table/table.utils';
-import {DEFAULT_STYLES} from '@/enviroments';
+} from '@components/table/table.utils';
+import {DEFAULT_STYLES} from '@root/enviroments';
 import {parse} from '@core/parse';
 
 function toCell(row, {sizeState, dataState, stylesState}) {
