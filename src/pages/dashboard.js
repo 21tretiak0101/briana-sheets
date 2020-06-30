@@ -1,4 +1,4 @@
-import {storage} from '@/store/storage';
+import {storage} from '@store/storage';
 
 export function toRecord({lastOpened, tableTitle, key}) {
   return `

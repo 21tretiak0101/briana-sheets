@@ -1,6 +1,6 @@
 import {Page} from '@core/Page';
 import {$} from '@core/dom';
-import {createDashboard} from '@/pages/dashboard';
+import {createDashboard} from '@root/pages/dashboard';
 
 export class DashboardPage extends Page {
   getRoot() {

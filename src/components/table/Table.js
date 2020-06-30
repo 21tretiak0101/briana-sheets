@@ -1,19 +1,19 @@
 import {ExcelComponent} from '@core/ExcelComponent';
-import {createTable} from '@/components/table/table.template';
-import {resizeHandler} from '@/components/table/table.resize';
-import {TableSelection} from '@/components/table/TableSelection';
+import {createTable} from '@components/table/table.template';
+import {resizeHandler} from '@components/table/table.resize';
+import {TableSelection} from '@components/table/TableSelection';
 import {$} from '@core/dom';
 import {parse} from '@core/parse';
-import * as actions from '@/store/actions';
+import * as actions from '@store/actions';
 import {
   getGroupIds,
   isResizable,
   nextSelector,
   shiftPressed,
   isSelectable
-} from '@/components/table/table.utils';
-import {changeText} from '@/store/actions';
-import {DEFAULT_STYLES} from '@/enviroments';
+} from '@components/table/table.utils';
+import {changeText} from '@store/actions';
+import {DEFAULT_STYLES} from '@root/enviroments';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table';

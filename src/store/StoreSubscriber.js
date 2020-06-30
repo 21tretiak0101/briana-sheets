@@ -1,4 +1,4 @@
-import {isEqual} from '@/components/table/table.utils';
+import {isEqual} from '@components/table/table.utils';
 
 export class StoreSubscriber {
   constructor(store) {

@@ -1,4 +1,4 @@
-import {DEFAULT_STYLES, DEFAULT_TITLE} from '@/enviroments';
+import {DEFAULT_STYLES, DEFAULT_TITLE} from '@root/enviroments';
 
 const defaultState = {
   tableTitle: DEFAULT_TITLE,
